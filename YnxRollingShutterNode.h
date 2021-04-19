@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------
 
 //	yannix lens distortion engine
-#include <ynxlensdistortionengines/RollingShutterLensDistortionEngine.h>
+#include "RollingShutterLensDistortionEngine.h"
 
 //---------------------------------------------------------------------
 //
