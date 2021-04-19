@@ -120,7 +120,7 @@ YnxRollingShutterNode.o: YnxRollingShutterNode.c++ \
  /opt/Nuke11.0v2/include/DDImage/RowCheckMacros.h \
  /opt/Nuke11.0v2/include/DDImage/Filter.h \
  /opt/Nuke11.0v2/include/DDImage/Op.h \
- ynxlensdistortionengines/RollingShutterLensDistortionEngine.h
+ RollingShutterLensDistortionEngine.h
 	/usr/bin/g++-4.8 -fPIC -Wall -std=c++11 -DGL_GLEXT_PROTOTYPES -DYNX_STANDALONE -I. -I/opt/Nuke11.0v2/include/     -DNDEBUG -O3 -funroll-loops -finline-functions -o YnxRollingShutterNode.o -c YnxRollingShutterNode.c++ 
 
 libynxlensdistortionengines.so:  RollingShutterLensDistortionEngine.o InvertWarpFuncs.o
