@@ -185,8 +185,8 @@ void YnxRollingShutterNode::engine( int y, int x, int r,
 			inputPositionXYYnxVector, outputPositionXYYnxVector;
 	
 	//	get width/height
-	int inputWidth = this->input(0)->w(),
-				inputHeight = this->input(0)->h();
+	int inputWidth = this->format().width(),
+	    inputHeight = this->format().height();
 	
 	//	loop all position in this row ( x ) 
 	//		and apply warp
@@ -430,7 +430,10 @@ void YnxRollingShutterNode::_validate( bool for_real )
  	this->info_.black_outside( false );
  	
 	//	compute bounding box by sampling point and warp to get min, max to decide as bounding box
-	DD::Image::Box boundingBox = this->getBoundingBox( input0().info().x(), input0().info().y(), input0().info().r(), input0().info().t() );
+	DD::Image::Box boundingBox = this->getBoundingBox( this->input0().info().x(), 
+							  this->input0().info().y(), 
+							  this->input0().info().r(), 
+							  this->input0().info().t() );
 	
 	//	copy input's bounding box
 	DD::Image::Box inputBoundingBox = this->info_;
@@ -477,10 +480,10 @@ void YnxRollingShutterNode::_request( int x, int y, int r, int t, DD::Image::Cha
 DD::Image::Box YnxRollingShutterNode::getBoundingBox( int x, int y, int r, int t )
 {
 	//	normalize given input into 0 - 1
-	double xIn_unit = double( x ) / format().width();
-	double yIn_unit = double( y ) / format().height();
-	double rIn_unit = double( r ) / format().width();
-	double tIn_unit = double( t ) / format().height();
+	double xIn_unit = double( x ) / this->format().width();
+	double yIn_unit = double( y ) / this->format().height();
+	double rIn_unit = double( r ) / this->format().width();
+	double tIn_unit = double( t ) / this->format().height();
 	
 	double xOut_unit, yOut_unit, rOut_unit, tOut_unit;
 	
@@ -497,10 +500,10 @@ DD::Image::Box YnxRollingShutterNode::getBoundingBox( int x, int y, int r, int t
 	}
 	
 	//	unnormalize the position  after warped
-	double xOut_pixel = xOut_unit * format().width();
-	double yOut_pixel = yOut_unit * format().height();
-	double rOut_pixel = rOut_unit * format().width();
-	double tOut_pixel = tOut_unit * format().height();
+	double xOut_pixel = xOut_unit * this->format().width();
+	double yOut_pixel = yOut_unit * this->format().height();
+	double rOut_pixel = rOut_unit * this->format().width();
+	double tOut_pixel = tOut_unit * this->format().height();
 	
 	//	return the bounding box
 	return DD::Image::Box( int( floor( xOut_pixel ) ) - 2, int( floor( yOut_pixel ) ) - 2, int( ceil( rOut_pixel ) ) + 2, int( ceil( tOut_pixel ) ) + 2 );
@@ -597,7 +600,7 @@ void YnxRollingShutterNode::getDistortMinMaxBoundingBox( double x, double y, dou
 	//	try to warp the position
 	try
 	{
-		outputVec = this->rollingShutterLensDistortionEngine.applyWarp( inputVec );
+		outputVec = this->rollingShutterLensDistortionEngine.removeWarp( inputVec );
 	}
 	catch( ynxValueException &e )
 	{
